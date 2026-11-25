@@ -23,5 +23,13 @@ services:
         sync: false
       - key: GOOGLE_CLIENT_ID
         sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: EMAIL_FROM_NAME
+        value: NutriConnect
+      - key: APP_URL
+        sync: false
       - key: HEARING_DELAY_DAYS
         value: "5"

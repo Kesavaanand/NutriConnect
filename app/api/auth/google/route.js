@@ -27,6 +27,7 @@ export const POST = handler(async (req) => {
 
   if (user) {
     if (!user.googleId) user.googleId = g.sub; // link Google to an existing email account
+    user.emailVerified = true; // Google has already verified this email
     if (!user.avatar && g.picture) user.avatar = g.picture;
     await user.save();
     if (user.role === 'provider' && user.status === 'terminated') {
@@ -44,6 +45,7 @@ export const POST = handler(async (req) => {
       email,
       googleId: g.sub,
       avatar: g.picture,
+      emailVerified: true,
       role: safeRole,
       status: safeRole === 'provider' ? 'pending' : 'active',
       statusHistory: safeRole === 'provider' ? [{ status: 'pending', reason: 'Signed up with Google', by: 'system' }] : [],

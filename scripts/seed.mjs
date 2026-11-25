@@ -52,7 +52,7 @@ if (!admin) {
   const r = await col('users').insertOne({
     firstName: 'Admin', lastName: '', name: 'Administrator', email: adminEmail,
     password: bcrypt.hashSync(process.env.ADMIN_PASSWORD || 'Admin@12345', 10),
-    role: 'admin', status: 'active', statusHistory: [], createdAt: now, updatedAt: now,
+    role: 'admin', status: 'active', emailVerified: true, statusHistory: [], createdAt: now, updatedAt: now,
   });
   admin = { _id: r.insertedId };
 }
@@ -62,7 +62,7 @@ async function user(first, last, email, role, status, extra = {}) {
   const { insertedId } = await col('users').insertOne({
     firstName: first, lastName: last, name: `${first} ${last}`, email, password: hash,
     phone: extra.phone || '98' + String(Math.floor(10000000 + Math.random() * 89999999)),
-    role, status, statusReason: extra.statusReason || '', statusHistory: extra.statusHistory || [],
+    role, status, emailVerified: true, statusReason: extra.statusReason || '', statusHistory: extra.statusHistory || [],
     reportsResetAt: extra.reportsResetAt, createdAt: extra.createdAt || ago(60 * DAY), updatedAt: now,
   });
   return insertedId;

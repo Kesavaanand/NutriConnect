@@ -12,6 +12,9 @@ export const POST = handler(async (req) => {
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw new HttpError(401, 'Incorrect email or password.');
   }
+  if (user.emailVerified === false) {
+    return json({ error: 'Please verify your email first. We sent a 6-digit code to your inbox.', code: 'EMAIL_NOT_VERIFIED', email: user.email }, 403);
+  }
   if (user.role === 'provider' && user.status === 'terminated') {
     throw new HttpError(403, 'This account has been terminated by the administrator.' +
       (user.statusReason ? ` Reason: ${user.statusReason}` : ''));

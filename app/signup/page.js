@@ -33,9 +33,9 @@ function SignupForm() {
     setLoading(true);
     setError('');
     try {
-      const { user, token } = await api('/api/auth/signup', { method: 'POST', body: { ...form, role } });
-      setToken(token); // this tab only
-      goNext(user);
+      // Account created but not yet verified: go to the 6-digit code page
+      const d = await api('/api/auth/signup', { method: 'POST', body: { ...form, role } });
+      router.push(`/verify-email?email=${encodeURIComponent(d.email)}${d.emailConfigured === false ? '&dev=1' : ''}`);
     } catch (err) {
       setError(err.message);
       setLoading(false);
@@ -88,9 +88,10 @@ function SignupForm() {
           <div><label className="label">Password</label><input className="input" type="password" required minLength={6} value={form.password} onChange={set('password')} placeholder="At least 6 characters" autoComplete="new-password" /></div>
           <div><label className="label">Confirm password</label><input className="input" type="password" required value={form.confirm} onChange={set('confirm')} autoComplete="new-password" /></div>
         </div>
-        <button className="btn-primary w-full py-3" disabled={loading}>{loading ? 'Creating account…' : role === 'provider' ? 'Create account & continue to application' : 'Create account'}</button>
+        <button className="btn-primary w-full py-3" disabled={loading}>{loading ? 'Creating account…' : 'Create account & verify email'}</button>
       </form>
 
+      <p className="mt-3 text-center text-xs text-slate-500">By creating an account you agree to our <Link href="/terms" className="underline">Terms of Service</Link> and <Link href="/privacy" className="underline">Privacy Policy</Link>.</p>
       <GoogleButton mode="signup" role={role} providerType={form.providerType} onSuccess={(d) => { setToken(d.token); goNext(d.user); }} onError={setError} />
 
       <p className="mt-6 text-center text-sm text-slate-500">Already have an account? <Link href="/login" className="font-semibold text-brand-700 hover:underline">Log in</Link></p>

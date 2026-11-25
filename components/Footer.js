@@ -43,6 +43,8 @@ export default function Footer() {
       </div>
       <div className="border-t border-slate-100 py-4 text-center text-xs text-slate-400">
         © {new Date().getFullYear()} NutriConnect. Not a substitute for emergency medical care.
+        <span className="mx-2">·</span><Link href="/privacy" className="hover:text-brand-700">Privacy Policy</Link>
+        <span className="mx-2">·</span><Link href="/terms" className="hover:text-brand-700">Terms of Service</Link>
       </div>
     </footer>
   );
